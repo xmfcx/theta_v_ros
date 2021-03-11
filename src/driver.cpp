@@ -19,9 +19,9 @@ thetaVDriver::~thetaVDriver()
 
 void thetaVDriver::getparam()
 {
-  m_param_useNVdec    = false;
+  m_param_useNVdec    = true;
   m_param_use4K       = false;
-  m_param_rawOn       = false;
+  m_param_rawOn       = true;
   m_param_compressOn  = false;
   m_param_pngLevel    = 3;
   // get param
@@ -59,7 +59,7 @@ bool thetaVDriver::gst_src_init(gst_src& srcIn)
 
   int *argc1;
   char ***argv1;
-  gst_init(argc1, argv1);
+  gst_init(nullptr, nullptr);
   srcIn.timer = g_timer_new();
   srcIn.loop = g_main_loop_new(NULL, TRUE);
   srcIn.pipeline = gst_parse_launch(pipeline_str, NULL);
@@ -159,7 +159,7 @@ void thetaVDriver::cv2sensorImgComp(cv::Mat mat, sensor_msgs::CompressedImage& s
   sensorImg.format = dummy.encoding;
   int bitDepth = enc::bitDepth(dummy.encoding);
   int numChannels = enc::numChannels(dummy.encoding);
-  params[0] = CV_IMWRITE_PNG_COMPRESSION;
+  params[0] = cv::IMWRITE_PNG_COMPRESSION;
   params[1] = m_param_pngLevel;
   sensorImg.format += "; png compressed";
   if (((bitDepth == 16) || (bitDepth == 8)) && ((numChannels == 1) || (numChannels == 3)))
